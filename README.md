@@ -1,4 +1,3 @@
-Time spent: ~10h.
 # Getting Started
 
 ## Step 1: Add .env file
