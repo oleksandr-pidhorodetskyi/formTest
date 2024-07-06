@@ -5,6 +5,7 @@ import InputFile from "./components/base/InputFile";
 import Input from "./components/base/Input";
 import validationConfig from "./validators";
 import { FormErrors, FormType } from "./types/App.types";
+import CalendarComponent from "./components/base/CustomCalendar";
 
 const App: React.FC = () => {
   const [formData, setFormData] = useState<FormType>({
@@ -99,7 +100,10 @@ const App: React.FC = () => {
           </div>
         </section>
         <section>
-          <h3 className="text-darkBlue font-medium text-2xl">Personal info</h3>
+          <h3 className="text-darkBlue font-medium text-2xl mb-8">
+            Personal info
+          </h3>
+          <CalendarComponent />
         </section>
       </div>
     </main>
