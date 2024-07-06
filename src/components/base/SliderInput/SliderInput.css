@@ -1,0 +1,3 @@
+.slider {
+    background: linear-gradient(to right, #761BE4 0%, #761BE4 var(--value), #CBB6E5 var(--value), #CBB6E5 100%);
+}
