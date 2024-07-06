@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import "./CustomCalendar.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import arrowLeft from "../../assets/icons/arrowLeft.svg";
-import arrowRight from "../../assets/icons/arrowRight.svg";
-import { TIMES } from "../../constants";
-import { NinjasApi } from "../../api/ninjas.api";
-import { formatDate } from "../../utils/formatDate";
-import WarnIcon from "../icons/WarnIcon";
+import arrowLeft from "../../../assets/icons/arrowLeft.svg";
+import arrowRight from "../../../assets/icons/arrowRight.svg";
+import { TIMES } from "../../../constants";
+import { NinjasApi } from "../../../api/ninjas.api";
+import { formatDate } from "../../../utils/formatDate";
+import WarnIcon from "../../icons/WarnIcon";
 
 interface Holiday {
   date: string;
@@ -96,11 +97,13 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   }, []);
 
   return (
-    <div className="w-full flex justify-between gap-x-6" ref={calendarRef}>
-      <div>
+    <div
+      className="w-full flex flex-col gap-y-6 md:flex-row md:justify-between md:gap-x-2"
+      ref={calendarRef}>
+      <div className="w-full md:w-[70%]">
         <h5 className="text-base text-darkBlue mb-2">Date</h5>
         <Calendar
-          className="bg-white shadow-md rounded-lg p-6 w-[70%] "
+          className="bg-white rounded-lg p-6 w-full"
           onChange={onDateChange}
           value={selectedDate}
           tileDisabled={({ date }) => isDateDisabled(date)}
@@ -108,6 +111,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
           prev2Label={null}
           nextLabel={<img src={arrowRight} alt="arrowRight" />}
           prevLabel={<img src={arrowLeft} alt="arrowLeft" />}
+          locale="en-US"
         />
         {observance && (
           <div className="mt-3 flex gap-x-2 text-sm text-darkBlue">
@@ -116,11 +120,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
           </div>
         )}
       </div>
-      <div className="w-[20%]">
+      <div className="w-full md:w-[20%]">
         {selectedDate ? (
           <div>
             <h5 className="text-base text-darkBlue mb-2">Time</h5>
-            <div className="flex flex-col gap-y-2 ">
+            <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 md:flex-col  ">
               {TIMES.map((time, index) => (
                 <div
                   key={time + index}
