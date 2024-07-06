@@ -25,7 +25,7 @@ const App: React.FC = () => {
   const [formData, setFormData] = useState<FormType>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitPressed, setSubmitPressed] = useState<boolean>(false);
-
+  console.log(process.env);
   const handleChange = (
     name: string,
     value: string | number | File | Date | null
