@@ -9,6 +9,7 @@ import CalendarComponent from "./components/base/CustomCalendar/CustomCalendar";
 import CustomButton from "./components/base/CustomButton";
 import { MAX_AGE, MIN_AGE } from "./constants";
 import { LetsworkoutApi } from "./api/letsWorkout.api";
+import { hasErrors } from "./utils/hasErrors";
 
 const initialFormData: FormType = {
   firstName: "",
@@ -23,6 +24,7 @@ const initialFormData: FormType = {
 const App: React.FC = () => {
   const [formData, setFormData] = useState<FormType>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [submitPressed, setSubmitPressed] = useState<boolean>(false);
 
   const handleChange = (
     name: string,
@@ -32,7 +34,7 @@ const App: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
-    validateField(name, value);
+    submitPressed && validateField(name, value);
   };
 
   const validateField = (
@@ -81,17 +83,19 @@ const App: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setSubmitPressed(true);
     const validatedFormErrors = validateForm();
 
     if (Object.keys(validatedFormErrors).length === 0) {
       try {
+        setSubmitPressed(false);
         await LetsworkoutApi.submitForm(formData);
         console.log("Form Data Submitted:", formData);
+        setFormData(initialFormData);
       } catch (error) {
         console.log(error);
       }
     }
-    setFormData(initialFormData);
   };
   return (
     <main className="bg-mainPink min-h-screen w-full">
@@ -151,7 +155,7 @@ const App: React.FC = () => {
             setSelectedDate={handleChange}
           />
         </fieldset>
-        <CustomButton disabled={Object.keys(errors).length === 0} type="submit">
+        <CustomButton disabled={!hasErrors(errors)} type="submit">
           Send Application
         </CustomButton>
       </form>
