@@ -1,12 +1,13 @@
 import React from "react";
 import DefaultErrorIcon from "../../assets/icons/error-icon.svg";
+import { ErrorType } from "../../types/App.types";
 
 interface InputProps {
   label?: string;
   errorIcon?: React.ReactNode;
-  errorMessage?: string;
+  errorMessage?: ErrorType;
   value: string;
-  setValue: (value: string) => void;
+  setValue: (name: string, value: string) => void;
   name: string;
 }
 
@@ -29,22 +30,29 @@ const Input: React.FC<InputProps> = ({
         id={name}
         name={name}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setValue(name, e.target.value.trim())}
         type="text"
         className={`border text-base leading-[none] font-medium rounded-lg text-darkBlue block w-full px-4 py-3 outline-none focus:border-2 ${
-          errorMessage
+          errorMessage?.message
             ? "bg-lightRed border-2 border-red focus:ring-red focus:border-red"
             : "bg-white border-pink focus:ring-purple  focus:border-purple"
         }`}
       />
-      {errorMessage ? (
+      {errorMessage?.message ? (
         <div className="mt-2 flex gap-x-2">
           {errorIcon ? (
             errorIcon
           ) : (
             <img src={DefaultErrorIcon} alt="default error icon" />
           )}
-          <p className="text-sm text-darkBlue">{errorMessage}</p>
+          <div>
+            <p className="text-sm text-darkBlue">{errorMessage.message}</p>
+            {errorMessage.example ? (
+              <p className="text-sm text-darkBlue">
+                Example: {errorMessage.example}
+              </p>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>

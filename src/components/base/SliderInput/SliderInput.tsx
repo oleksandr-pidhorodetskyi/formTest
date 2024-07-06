@@ -7,7 +7,7 @@ interface SliderInputProps {
   maxValue: number;
   name: string;
   value: number;
-  setValue: (value: number) => void;
+  setValue: (name: string, value: number) => void;
   label: string;
 }
 
@@ -50,7 +50,7 @@ const SliderInput: React.FC<SliderInputProps> = ({
           type="range"
           name={name}
           value={value}
-          onChange={(e) => setValue(+e.target.value)}
+          onChange={(e) => setValue(name, +e.target.value)}
           min={minValue}
           max={maxValue}
           className={`slider w-full h-1 bg-purple-200 rounded-lg appearance-none cursor-pointer accent-purple`}

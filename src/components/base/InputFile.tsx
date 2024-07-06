@@ -5,7 +5,7 @@ interface InputFileProps {
   label: string;
   name: string;
   value: File | null;
-  setValue: (value: File | null) => void;
+  setValue: (name: string, value: File | null) => void;
 }
 
 const InputFile: React.FC<InputFileProps> = ({
@@ -20,7 +20,7 @@ const InputFile: React.FC<InputFileProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!value && e.target.files && e.target.files[0]) {
-      setValue(e.target.files[0]);
+      setValue(name, e.target.files[0]);
     }
   };
 
@@ -29,22 +29,19 @@ const InputFile: React.FC<InputFileProps> = ({
     e.stopPropagation();
     setDragActive(false);
     if (!value && e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setValue(e.dataTransfer.files[0]);
+      setValue(name, e.dataTransfer.files[0]);
     }
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("leave");
-
     setDragActive(false);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("over");
     if (value) {
       setDragActive(false);
     } else {
@@ -59,7 +56,7 @@ const InputFile: React.FC<InputFileProps> = ({
   };
 
   const removeFile = () => {
-    setValue(null);
+    setValue(name, null);
   };
 
   const openFileExplorer = () => {

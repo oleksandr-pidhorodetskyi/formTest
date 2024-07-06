@@ -1,13 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import SliderInput from "./components/base/SliderInput/SliderInput";
 import InputFile from "./components/base/InputFile";
 import Input from "./components/base/Input";
+import validationConfig from "./validators";
+import { FormErrors, FormType } from "./types/App.types";
 
 const App: React.FC = () => {
-  const [input, setInput] = React.useState("");
-  const [sliderInput, setSliderInput] = React.useState(30);
-  const [file, setFile] = React.useState<File | null>(null);
+  const [formData, setFormData] = useState<FormType>({
+    firstName: "",
+    lastName: "",
+    emailAddress: "",
+    age: 30,
+    photo: null,
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  const handleChange = (name: string, value: string | number | File | null) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    validateField(name, value);
+  };
+
+  const validateField = (
+    name: string,
+    value: string | number | File | null
+  ) => {
+    const fieldConfig = validationConfig[name];
+    if (!fieldConfig) {
+      return;
+    }
+
+    let error = {};
+
+    if (fieldConfig.required && !String(value)) {
+      error = { message: `${fieldConfig.name} is required.` };
+    } else if (
+      fieldConfig.pattern &&
+      !fieldConfig.pattern.test(String(value))
+    ) {
+      error = {
+        message: fieldConfig.errorMessage,
+        example: fieldConfig.example,
+      };
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
   return (
     <main className="bg-mainPink min-h-screen w-full">
       <div className="max-w-[30%] py-[10%] mx-auto flex flex-col gap-y-12">
@@ -17,37 +62,37 @@ const App: React.FC = () => {
           </h3>
           <div className="flex flex-col gap-y-6">
             <Input
-              value={input}
-              setValue={setInput}
+              value={formData.firstName}
+              setValue={handleChange}
               name="firstName"
-              // errorMessage={"error"}
+              errorMessage={errors.firstName}
               label={"First name"}
             />
             <Input
-              value={input}
-              setValue={setInput}
+              value={formData.lastName}
+              setValue={handleChange}
               name="lastName"
-              // errorMessage={"error"}
+              errorMessage={errors.lastName}
               label={"Last name"}
             />
             <Input
-              value={input}
-              setValue={setInput}
+              value={formData.emailAddress}
+              setValue={handleChange}
               name="emailAddress"
-              // errorMessage={"error"}
+              errorMessage={errors.emailAddress}
               label={"Email Address"}
             />
             <SliderInput
-              value={sliderInput}
-              setValue={setSliderInput}
+              value={formData.age}
+              setValue={handleChange}
               minValue={8}
               maxValue={100}
               label="Age"
               name="age"
             />
             <InputFile
-              value={file}
-              setValue={setFile}
+              value={formData.photo}
+              setValue={handleChange}
               label="Photo"
               name="photo"
             />
