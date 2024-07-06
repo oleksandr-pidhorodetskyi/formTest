@@ -74,7 +74,7 @@ const InputFile: React.FC<InputFileProps> = ({
       <div
         className={`${
           dragActive ? "bg-blue-400" : "bg-white"
-        } p-4 w-full rounded-lg h-24 text-center flex flex-col items-center justify-center`}
+        } p-4 w-full rounded-lg h-24 text-center flex flex-col items-center justify-center border border-pink`}
         onDragEnter={handleDragEnter}
         onDrop={handleDrop}
         onDragLeave={handleDragLeave}

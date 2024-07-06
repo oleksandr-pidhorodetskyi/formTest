@@ -4,6 +4,8 @@ export interface FormType {
   emailAddress: string;
   age: number;
   photo: File | null;
+  date: Date | null;
+  timeSlot: string;
 }
 
 export type ErrorType = { message: string; example?: string };

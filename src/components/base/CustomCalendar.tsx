@@ -6,6 +6,7 @@ import arrowRight from "../../assets/icons/arrowRight.svg";
 import { TIMES } from "../../constants";
 import { NinjasApi } from "../../api/ninjas.api";
 import { formatDate } from "../../utils/formatDate";
+import WarnIcon from "../icons/WarnIcon";
 
 interface Holiday {
   date: string;
@@ -13,10 +14,20 @@ interface Holiday {
   type: string;
 }
 
-const CalendarComponent: React.FC = () => {
-  const [timeSlot, setTimeSlot] = useState<string>("");
+interface CalendarComponentProps {
+  timeSlot: string;
+  setTimeSlot: (name: string, value: string) => void;
+  selectedDate: Date | null;
+  setSelectedDate: (name: string, value: Date | null) => void;
+}
+
+const CalendarComponent: React.FC<CalendarComponentProps> = ({
+  timeSlot,
+  setTimeSlot,
+  setSelectedDate,
+  selectedDate,
+}) => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [observance, setObservance] = useState<string | null>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -32,13 +43,16 @@ const CalendarComponent: React.FC = () => {
   const isDateDisabled = (date: Date) => {
     const formattedDate = formatDate(date);
 
-    return Boolean(
-      holidays.find((disabledDate: Holiday) => {
-        return (
-          disabledDate.type === "NATIONAL_HOLIDAY" &&
-          formattedDate === disabledDate.date
-        );
-      })
+    return (
+      date.getDay() === 0 ||
+      Boolean(
+        holidays.find((disabledDate: Holiday) => {
+          return (
+            disabledDate.type === "NATIONAL_HOLIDAY" &&
+            formattedDate === disabledDate.date
+          );
+        })
+      )
     );
   };
 
@@ -53,19 +67,19 @@ const CalendarComponent: React.FC = () => {
   };
 
   const onDateChange = (value: any) => {
-    setTimeSlot("");
+    setTimeSlot("timeSlot", "");
     if (value && !Array.isArray(value)) {
-      setSelectedDate(value);
+      setSelectedDate("date", value);
       const observanceName = isObservance(value);
       setObservance(observanceName);
     } else {
-      setSelectedDate(null);
+      setSelectedDate("date", null);
       setObservance(null);
     }
   };
 
   const handleTimeSlot = (time: string) => {
-    setTimeSlot(time);
+    setTimeSlot("timeSlot", time);
   };
 
   useEffect(() => {
@@ -82,8 +96,9 @@ const CalendarComponent: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div className="w-full flex justify-between gap-x-6" ref={calendarRef}>
+    <div className="w-full flex justify-between gap-x-6" ref={calendarRef}>
+      <>
+        <h5 className="text-base text-darkBlue mb-2">Date</h5>
         <Calendar
           className="bg-white shadow-md rounded-lg p-6 w-[70%] "
           onChange={onDateChange}
@@ -94,8 +109,17 @@ const CalendarComponent: React.FC = () => {
           nextLabel={<img src={arrowRight} alt="arrowRight" />}
           prevLabel={<img src={arrowLeft} alt="arrowLeft" />}
         />
-        <div className="w-[20%]">
-          {selectedDate ? (
+        {observance && (
+          <div className="mt-3 flex gap-x-2 text-sm text-darkBlue">
+            <WarnIcon className="fill-pink" />
+            {`It is Polish ${observance}.`}
+          </div>
+        )}
+      </>
+      <div className="w-[20%]">
+        {selectedDate ? (
+          <>
+            <h5 className="text-base text-darkBlue mb-2">Time</h5>
             <div className="flex flex-col gap-y-2 ">
               {TIMES.map((time, index) => (
                 <div
@@ -106,14 +130,9 @@ const CalendarComponent: React.FC = () => {
                 </div>
               ))}
             </div>
-          ) : null}
-        </div>
+          </>
+        ) : null}
       </div>
-      {observance && (
-        <div className="mt-4 p-2 bg-white rounded-lg border border-pink">
-          {`Observance: ${observance}`}
-        </div>
-      )}
     </div>
   );
 };

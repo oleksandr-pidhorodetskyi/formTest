@@ -1,6 +1,6 @@
 import React from "react";
-import DefaultErrorIcon from "../../assets/icons/error-icon.svg";
 import { ErrorType } from "../../types/App.types";
+import WarnIcon from "../icons/WarnIcon";
 
 interface InputProps {
   label?: string;
@@ -40,11 +40,7 @@ const Input: React.FC<InputProps> = ({
       />
       {errorMessage?.message ? (
         <div className="mt-2 flex gap-x-2">
-          {errorIcon ? (
-            errorIcon
-          ) : (
-            <img src={DefaultErrorIcon} alt="default error icon" />
-          )}
+          {errorIcon ? errorIcon : <WarnIcon />}
           <div>
             <p className="text-sm text-darkBlue">{errorMessage.message}</p>
             {errorMessage.example ? (

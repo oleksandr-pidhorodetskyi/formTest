@@ -9,7 +9,7 @@ const DeleteIcon: React.FC<DeleteIconProps> = ({ ...rest }) => {
       height="20"
       viewBox="0 0 20 20"
       fill="none"
-      className="fill-current fill-darkBlue"
+      className="fill-darkBlue"
       xmlns="http://www.w3.org/2000/svg"
       {...rest}>
       <g id="Group">
