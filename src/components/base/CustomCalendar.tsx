@@ -97,7 +97,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
 
   return (
     <div className="w-full flex justify-between gap-x-6" ref={calendarRef}>
-      <>
+      <div>
         <h5 className="text-base text-darkBlue mb-2">Date</h5>
         <Calendar
           className="bg-white shadow-md rounded-lg p-6 w-[70%] "
@@ -115,10 +115,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
             {`It is Polish ${observance}.`}
           </div>
         )}
-      </>
+      </div>
       <div className="w-[20%]">
         {selectedDate ? (
-          <>
+          <div>
             <h5 className="text-base text-darkBlue mb-2">Time</h5>
             <div className="flex flex-col gap-y-2 ">
               {TIMES.map((time, index) => (
@@ -130,7 +130,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
                 </div>
               ))}
             </div>
-          </>
+          </div>
         ) : null}
       </div>
     </div>

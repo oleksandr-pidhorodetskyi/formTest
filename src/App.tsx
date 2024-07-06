@@ -8,6 +8,7 @@ import { ErrorType, FormErrors, FormType } from "./types/App.types";
 import CalendarComponent from "./components/base/CustomCalendar";
 import CustomButton from "./components/base/CustomButton";
 import { MAX_AGE, MIN_AGE } from "./constants";
+import { LetsworkoutApi } from "./api/letsWorkout.api";
 
 const initialFormData: FormType = {
   firstName: "",
@@ -78,13 +79,18 @@ const App: React.FC = () => {
     return newErrors;
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const validatedFormErrors = validateForm();
 
     if (Object.keys(validatedFormErrors).length === 0) {
-      console.log("Form Data Submitted:", formData);
-      setFormData(initialFormData);
+      try {
+        await LetsworkoutApi.submitForm(formData);
+        console.log("Form Data Submitted:", formData);
+        setFormData(initialFormData);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   return (
